@@ -5,7 +5,7 @@ const getVerifierDigit = (digit: number) => {
   return (remainder < 2) ? 0 : 11 - remainder;
 }
 
-export const isValid = (str: string): boolean => {
+const isValid = (str: string): boolean => {
   const cpf = str.replace(/\D+/g,'');
 
   if (!cpf) {
@@ -41,4 +41,8 @@ export const isValid = (str: string): boolean => {
     console.error(`Error: ${e}`);
     return false;  
   }
+}
+
+export const CPFValidator = {
+  isValid
 }
