@@ -1,6 +1,7 @@
 import { Order } from './Order';
 import { OrderItem } from '../OrderItem/OrderItem';
 import { InvalidCpfError } from '../../errors/InvalidCpfError';
+import { Coupon } from '../Coupon/Coupon';
 
 describe('Given Order', () => {
   describe('When CPF is invalid', () => {
@@ -36,6 +37,35 @@ describe('Given Order', () => {
       order.addItem(carrot);
       const placedOrder = order.placeOrder(cpf);
       expect(placedOrder.items).toHaveLength(3);
+    });
+  });
+
+  describe('When order has no disccount', () => {
+    test('it should place order full value', () => {
+      const cpf = '935.411.347-80';
+      const items: Array<OrderItem> = [];
+      const order = new Order(items);
+      const apple = new OrderItem('apple', 6, 1);
+      const banana = new OrderItem('banana', 4, 1);
+      order.addItem(apple);
+      order.addItem(banana);
+      const placedOrder = order.placeOrder(cpf);
+      expect(placedOrder.price).toBe(10);
+    });
+  });
+
+  describe('When order has 70% disccount coupon', () => {
+    test('it should place order with discount', () => {
+      const cpf = '935.411.347-80';
+      const items: Array<OrderItem> = [];
+      const order = new Order(items);
+      const apple = new OrderItem('apple', 6, 1);
+      const banana = new OrderItem('banana', 4, 1);
+      const coupon = new Coupon('promobomba', 0.7);
+      order.addItem(apple);
+      order.addItem(banana);
+      const placedOrder = order.placeOrder(cpf, coupon);
+      expect(placedOrder.price).toBe(3);
     });
   });
 });
