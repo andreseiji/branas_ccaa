@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+  "incremental": true,
+  "target": "es6",
+  "module": "commonjs",
+  "outDir": "./dist",
+  "strict": true,
+  "esModuleInterop": true
+  },
+  "include": [
+    "./src"
+, "examples/Circle/Circle.test.ts"  ],
+  "exclude": [
+    "./node_modules",
+    "./examples"
+  ]
+}
