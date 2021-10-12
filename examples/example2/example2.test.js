@@ -30,4 +30,16 @@ describe('Given validate CPF', () => {
     const isValid = example2.validate(cpf);
     expect(isValid).toBe(false);
   });
+  
+  test('When CPF is 123.456.789-999 it is invalid', () => {
+    const cpf = '123.456.789-999';
+    const isValid = example2.validate(cpf);
+    expect(isValid).toBe(false);
+  });
+  
+  test('When CPF is 123.456.789 it is invalid', () => {
+    const cpf = '123.456.789';
+    const isValid = example2.validate(cpf);
+    expect(isValid).toBe(false);
+  });
 });

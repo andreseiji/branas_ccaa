@@ -25,4 +25,14 @@ describe('Given validate CPF', () => {
     const cpf = '123.456.789-99';
     expect(CPFValidator.isValid(cpf)).toBe(false);
   });
+  
+  test('When CPF is 123.456.789-999 it is invalid', () => {
+    const cpf = '123.456.789-999';
+    expect(CPFValidator.isValid(cpf)).toBe(false);
+  });
+  
+  test('When CPF is 123.456.789 it is invalid', () => {
+    const cpf = '123.456.789';
+    expect(CPFValidator.isValid(cpf)).toBe(false);
+  });
 });

@@ -19,28 +19,23 @@ function validate(str) {
   if (!validateSameChar(cpf)) {
     return false;
   }
+  
+  const firstDigits = cpf.substring(0, 9).split('');
+  const verifierDigits = cpf.substring(9, 11);
+  let d1, d2;
+  d1 = d2 = 0;
 
-	try {
-    const firstDigits = cpf.substring(0, 9).split('');
-    const verifierDigits = cpf.substring(9, 11);
-    let d1, d2;
-    d1 = d2 = 0;
+  firstDigits.forEach((d, index) => {
+    let digit = parseInt(d);
+    d1 = d1 + ( 10 - index ) * digit;
+    d2 = d2 + ( 11 - index ) * digit;
+  });
 
-    firstDigits.forEach((d, index) => {
-      let digit = parseInt(d);
-      d1 = d1 + ( 10 - index ) * digit;
-      d2 = d2 + ( 11 - index ) * digit;
-    });
+  const firstVerifier = getVerifierDigit(d1);
+  d2 = d2 + 2 * firstVerifier;
+  const secondVerifier = getVerifierDigit(d2);
 
-    const firstVerifier = getVerifierDigit(d1);
-    d2 = d2 + 2 * firstVerifier;
-    const secondVerifier = getVerifierDigit(d2);
-
-    return verifierDigits == `${firstVerifier}${secondVerifier}`;
-  } catch (e){  
-    console.error(`Error: ${e}`);
-    return false;  
-  }
+  return verifierDigits == `${firstVerifier}${secondVerifier}`;
 }
 
 module.exports = {
