@@ -1,41 +1,40 @@
-const validateSameChar = (str) => !str.split('').every(c => c === str[0]);
+const CPF_VALID_LENGTH = 11;
+const FACTOR_FIRST_DIGIT = 10;
+const FACTOR_SECOND_DIGIT = 11;
 
-const getVerifierDigit = (digit) => {
-  const remainder = (digit % 11);
-  return (remainder < 2) ? 0 : 11 - remainder;
+const cleanCpf = (cpf) => cpf.replace(/\D+/g,'');
+
+const charsAreTheSame = (str) => {
+  const [firstDigit] = str;
+  return [...str].every(c => c === firstDigit);
+};
+
+const calculateDigit = (cpf, factor) => {
+  let total = 0;
+  for (const digit of cpf) {
+    if (factor > 1) {
+      total = total + parseInt(digit) * factor--;
+    }
+  }
+  const remainder = total % 11;
+  return (remainder < 2) ? 0 : (11 - remainder);
 }
 
+const getVerifierDigits = (cpf) => cpf.slice(9);
+
 function validate(str) {
-  const cpf = str.replace(/\D+/g,'');
+  const cpf = cleanCpf(str);
 
-  if (!cpf) {
-    return false;
-  }
+  if (!cpf) return false;
+  if (cpf.length !== CPF_VALID_LENGTH) return false;
+  if (charsAreTheSame(cpf)) return false;
 
-  if (cpf.length !== 11) {
-    return false;
-  }
+  const firstDigit = calculateDigit(cpf, FACTOR_FIRST_DIGIT);
+  const secondDigit = calculateDigit(cpf, FACTOR_SECOND_DIGIT);
+  const verifierDigits = getVerifierDigits(cpf);
+  const calculatedVerifierDigits = `${firstDigit}${secondDigit}`;
 
-  if (!validateSameChar(cpf)) {
-    return false;
-  }
-  
-  const firstDigits = cpf.substring(0, 9).split('');
-  const verifierDigits = cpf.substring(9, 11);
-  let d1, d2;
-  d1 = d2 = 0;
-
-  firstDigits.forEach((d, index) => {
-    let digit = parseInt(d);
-    d1 = d1 + ( 10 - index ) * digit;
-    d2 = d2 + ( 11 - index ) * digit;
-  });
-
-  const firstVerifier = getVerifierDigit(d1);
-  d2 = d2 + 2 * firstVerifier;
-  const secondVerifier = getVerifierDigit(d2);
-
-  return verifierDigits == `${firstVerifier}${secondVerifier}`;
+  return verifierDigits === calculatedVerifierDigits;
 }
 
 module.exports = {
